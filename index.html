@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MADMAN WEBWORKS</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #000;
+      color: #0f0;
+      font-family: 'Nosifer', cursive;
+      overflow: hidden;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="24" font-size="24">⚡</text></svg>'), auto;
+    }
+    .matrix { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+    .char { position: absolute; color: #0f0; font-family: monospace; font-weight: bold; opacity: 0.8; animation: fall linear infinite; }
+    @keyframes fall { to { transform: translateY(100vh); } }
+    h1 {
+      font-family: 'Creepster', cursive;
+      font-size: 4rem;
+      text-align: center;
+      margin: 2rem 0;
+      color: #f00;
+      text-shadow: 0 0 20px #0f0, 0 0 40px #f00;
+      animation: flicker 1.5s infinite;
+    }
+    @keyframes flicker {
+      0%, 19%, 21%, 23%, 25%, 28%, 100% { text-shadow: 0 0 20px #0f0, 0 0 40px #f00; }
+      20%, 22%, 24%, 27% { text-shadow: none; }
+    }
+    .glitch-btn {
+      background: #f00; color: #000; border: 3px solid #0f0;
+      padding: 1rem 2rem; font-size: 1.8rem; font-family: 'Creepster', cursive;
+      margin: 2rem auto; display: block; cursor: pointer;
+      box-shadow: 0 0 20px #0f0; animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 20px #0f0; }
+      50% { box-shadow: 0 0 40px #f00; }
+      100% { box-shadow: 0 0 20px #0f0; }
+    }
+    .console {
+      position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.8);
+      color: #0f0; padding: 10px; font-family: monospace; border: 1px solid #0f0;
+      max-width: 80%; overflow: hidden; white-space: nowrap;
+    }
+    .glitch-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,0,0,.1) 10px, rgba(255,0,0,.1) 20px);
+      opacity: 0; pointer-events: none; animation: glitch-storm 0.5s steps(5) 3;
+    }
+    @keyframes glitch-storm {
+      0%, 100% { opacity: 0; transform: translateX(0); }
+      50% { opacity: 0.3; transform: translateX(10px); }
+    }
+    .visitor-count {
+      position: fixed; top: 10px; right: 10px; background: #000; color: #0f0;
+      padding: 5px 10px; border: 1px solid #0f0; font-family: monospace; font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="matrix" id="matrix"></div>
+  <div class="console" id="console"></div>
+  <div class="visitor-count" id="visitors">Visitors: <span id="count">0</span></div>
+
+  <h1>MADMAN WEBWORKS</h1>
+  <button class="glitch-btn" onclick="triggerGlitch()">BREAK REALITY</button>
+
+  <audio id="hackSound" src="https://cdn.freesound.org/previews/612/612536_5674468-lq.mp3" preload="auto"></audio>
+
+  <script>
+    // MATRIX RAIN
+    const matrix = document.getElementById('matrix');
+    const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+    setInterval(() => {
+      const char = document.createElement('div');
+      char.className = 'char';
+      char.textContent = chars[Math.floor(Math.random() * chars.length)];
+      char.style.left = Math.random() * 100 + 'vw';
+      char.style.animationDuration = Math.random() * 5 + 3 + 's';
+      char.style.fontSize = Math.random() * 15 + 10 + 'px';
+      matrix.appendChild(char);
+      setTimeout(() => char.remove(), 10000);
+    }, 60);
+
+    // AUTO-HACKING CONSOLE
+    const consoleEl = document.getElementById('console');
+    const logs = [
+      "> Bypassing firewall...",
+      "> Injecting chaos payload...",
+      "> System override: 99%",
+      "> ACCESS GRANTED. Welcome, Mad Scientist.",
+      "> Running: reality_break.exe"
+    ];
+    let i = 0;
+    setInterval(() => {
+      if (i < logs.length) {
+        consoleEl.textContent = logs[i];
+        i++;
+      }
+    }, 2000);
+
+    // HACKER SOUND ON LOAD
+    window.onload = () => {
+      document.getElementById('hackSound').play().catch(() => {});
+      updateVisitorCount();
+    };
+
+    // LIVE VISITOR COUNTER (via free service)
+    function updateVisitorCount() {
+      fetch('https://api.countapi.xyz/hit/madmanwebworks.github.io/visits')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('count').textContent = data.value;
+        });
+    }
+
+    // GLITCH STORM BUTTON
+    function triggerGlitch() {
+      const overlay = document.createElement('div');
+      overlay.className = 'glitch-overlay';
+      document.body.appendChild(overlay);
+      setTimeout(() => overlay.remove(), 2000);
+      document.body.style.filter = 'invert(1)';
+      setTimeout(() => document.body.style.filter = '', 500);
+      new Audio('https://cdn.freesound.org/previews/276/276954_5123856-lq.mp3').play();
+    }
+  </script>
+</body>
+</html>
